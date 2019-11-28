@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.DBLogin.api.BaseApiService;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     Button btnRegister;
     ProgressDialog loading;
+    TextView forgotPassword;
 
     Context mContext;
     BaseApiService mApiService;
@@ -50,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
+        forgotPassword = (TextView) findViewById(R.id.forgotPassword);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +69,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(mContext, com.example.DBLogin.RegisterActivity.class));
             }
         });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Redirecting...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void requestLogin() {
