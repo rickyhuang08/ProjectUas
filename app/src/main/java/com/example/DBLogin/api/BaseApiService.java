@@ -18,12 +18,17 @@ public interface BaseApiService {
         Call<ResponseBody> loginRequest(@Body JsonObject body);
 
         // Fungsi ini untuk memanggil API http://10.0.2.2/mahasiswa/register.php
-        @FormUrlEncoded
+        @Headers("Content-Type: application/json")
         @POST("register-user")
-        Call<ResponseBody> registerRequest(@Field("nama") String nama,
-                                           @Field("email") String email,
-                                           @Field("password") String password,
-                                           @Field("telepon") String telepon);
+        Call<ResponseBody> registerRequest(@Body JsonObject jsonObject);
+
+        @Headers("Content-Type: application/json")
+        @POST("check-forgot-password")
+        Call<ResponseBody> checkForgotPassword(@Body JsonObject jsonObject);
+
+        @Headers("Content-Type: application/json")
+        @POST("forgot-password")
+        Call<ResponseBody> forgotPassword(@Body JsonObject jsonObject);
     }
 
 

@@ -28,8 +28,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText etEmail;
-    EditText etPassword;
+    EditText userNameLogin;
+    EditText passwordLogin;
     Button btnLogin;
     Button btnRegister;
     ProgressDialog loading;
@@ -48,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void initComponents() {
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPassword = (EditText) findViewById(R.id.etPassword);
+        userNameLogin = (EditText) findViewById(R.id.userNameLogin);
+        passwordLogin = (EditText) findViewById(R.id.passwordLogin);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         forgotPassword = (TextView) findViewById(R.id.forgotPassword);
@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Redirecting...",
                         Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mContext, CheckForgotPasswordActivity.class));
             }
         });
 
@@ -82,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void requestLogin() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userName", etEmail.getText().toString());
-        jsonObject.addProperty("password", etPassword.getText().toString());
+        jsonObject.addProperty("userName", userNameLogin.getText().toString());
+        jsonObject.addProperty("password", passwordLogin.getText().toString());
         mApiService.loginRequest(jsonObject)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override

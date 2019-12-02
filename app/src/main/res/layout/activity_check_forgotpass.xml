@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckForgotPasswordActivity"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/colorRegister"
+            android:textStyle="normal|bold"
+            android:text="@string/forgotPassword"
+            android:textSize="24sp"
+            android:layout_marginBottom="40dp"/>
+
+        <EditText
+            android:id="@+id/emailAddressCheckForgotPassword"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/emailAddress"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/hintQuestionCheckForgotPasword"
+            android:layout_marginTop="22dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/hintAnswerCheckForgotPassword"
+            android:layout_marginTop="22dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hintAnswer"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="4dp"/>
+
+        <Button
+            android:id="@+id/btnCheckForgotPassword"
+            android:layout_marginTop="22dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnCheckForgotPassword" />
+    </LinearLayout>
+</RelativeLayout>

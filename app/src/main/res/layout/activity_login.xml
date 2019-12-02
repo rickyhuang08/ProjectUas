@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:padding="16dp">
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ricky_08_foreground" />
+    android:padding="16dp"
+    android:background="@color/colorPrimary">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="381dp"
+        android:layout_height="479dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="0dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="30dp">
@@ -23,29 +23,35 @@
             android:id="@+id/greet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
             android:gravity="center"
             android:text="Welcome Noob"
-            android:textColor="#661616"
-            android:textSize="12dp"
+            android:textColor="@android:color/background_dark"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/etEmail"
+            android:id="@+id/userNameLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
+            android:background="@android:color/background_light"
+            android:hint="@string/username"
+            android:inputType="textEmailAddress"
+            android:textSize="23dp"
+            />
+
+        <EditText
+            android:id="@+id/passwordLogin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/background_light"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="23dp" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -61,10 +67,21 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
             android:text="@string/register"
             android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:text="Forgot Password?"
+            android:textColor="@android:color/black"
+            android:textSize="16dp"
+            android:textStyle="normal|bold" />
 
         <TextView
             android:id="@+id/textView2"
@@ -73,17 +90,15 @@
             android:layout_marginTop="18dp"
             android:gravity="center"
             android:text="Terms And Condition"
+            android:textColor="@android:color/black"
             android:textSize="16dp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/forgotPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
-            android:text="Forgot Password?"
-            android:textSize="16dp"
-            android:textStyle="normal|bold" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="214dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/logo" />
 
 </RelativeLayout>

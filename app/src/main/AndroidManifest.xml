@@ -11,6 +11,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"> <!-- Untuk CLEARTEXT traffic -->
         <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".CheckForgotPasswordActivity"></activity>
+        <activity android:name=".ForgotPassword"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

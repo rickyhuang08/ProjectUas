@@ -8,12 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.DBLogin.api.BaseApiService;
 import com.example.DBLogin.api.UtilsApi;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,13 +31,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText etNama;
-    EditText etEmail;
-    EditText etPassword,etTelepon;
-
+    EditText userNameRegister;
+    EditText emailAddressRegister;
+    EditText passwordRegister, phoneNumberRegister, hintAnswer;
+    private Spinner spinner;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
     Button btnRegister;
     ProgressDialog loading;
-
+    String hintQuestion,gender;
     Context mContext;
     BaseApiService mApiService;
 
@@ -43,52 +50,79 @@ public class RegisterActivity extends AppCompatActivity {
         mContext = this;
         mApiService = UtilsApi.getAPIService();
 
+        spinner = (Spinner)findViewById(R.id.hintQuestion);
+        String[] item = new String[]{"apa hewan ke sukaan anda?", "apa makanan favorite anda?", "apa mobil ke sukaan anda?" +
+                ""};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterActivity.this,
+                android.R.layout.simple_spinner_item,item);
+        spinner.setAdapter(adapter);
+
         initComponents();
     }
     public void initComponents(){
-        etNama = (EditText) findViewById(R.id.etNama);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPassword = (EditText) findViewById(R.id.etPassword);
-        etTelepon = (EditText) findViewById(R.id.etTelepon);
+        userNameRegister = (EditText) findViewById(R.id.userNameRegister);
+        passwordRegister = (EditText) findViewById(R.id.passwordRegister);
+        emailAddressRegister = (EditText) findViewById(R.id.emailAddress);
+        phoneNumberRegister = (EditText) findViewById(R.id.phoneNumber);
+        radioGroup = findViewById(R.id.radiogroup);
+        hintQuestion = spinner.getSelectedItem().toString();
+        hintAnswer = (EditText) findViewById(R.id.hintAnswer);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loading = ProgressDialog.show(mContext, null, "Harap Tunggu...", true, false);
+                int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                if(selectedRadioButtonId != -1){
+                    radioButton = findViewById(selectedRadioButtonId);
+                    gender = radioButton.getText().toString();
+                }else {
+                    Toast.makeText(mContext, "Please Selected Gender", Toast.LENGTH_SHORT).show();
+                }
+
                 requestRegister();
             }
         });
     }
 
     private void requestRegister(){
-        mApiService.registerRequest(etNama.getText().toString(),
-                etEmail.getText().toString(),
-                etPassword.getText().toString(),
-                etTelepon.getText().toString())
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", userNameRegister.getText().toString());
+        jsonObject.addProperty("password", passwordRegister.getText().toString());
+        jsonObject.addProperty("email_address", emailAddressRegister.getText().toString());
+        jsonObject.addProperty("phone_number", phoneNumberRegister.getText().toString());
+        jsonObject.addProperty("gender", gender);
+        jsonObject.addProperty("hint_question", hintQuestion);
+        jsonObject.addProperty("hint_answer", hintAnswer.getText().toString());
+
+        mApiService.registerRequest(jsonObject)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-                            Log.i("debug", "onResponse: BERHASIL");
-                            loading.dismiss();
-                            try {
-                                JSONObject jsonRESULTS = new JSONObject(response.body().string());
-                                if (jsonRESULTS.getString("error").equals("false")){
-                                    Toast.makeText(mContext, "BERHASIL REGISTRASI", Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonRESULTS = new JSONObject(response.body().string());
+                            if (response.isSuccessful()) {
+                                Log.i("debug", "onResponse: BERHASIL");
+                                loading.dismiss();
+                                int code = Integer.parseInt(jsonRESULTS.getString("code"));
+                                if (code == 200) {
+                                    String messageCode = jsonRESULTS.getString("code_message");
+                                    Toast.makeText(mContext, messageCode, Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(mContext, com.example.DBLogin.LoginActivity.class));
                                 } else {
-                                    String error_message = jsonRESULTS.getString("error_msg");
-                                    Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();
+                                    String errorMessage = jsonRESULTS.getString("code_message");
+                                    Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } else {
+                                Log.i("debug", "onResponse: GA BERHASIL");
+                                String errorMessage = jsonRESULTS.getString("code_message");
+                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
+                                loading.dismiss();
                             }
-                        } else {
-                            Log.i("debug", "onResponse: GA BERHASIL");
-                            loading.dismiss();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -101,3 +135,5 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 }
+
+
