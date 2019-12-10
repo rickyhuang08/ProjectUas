@@ -1,12 +1,16 @@
 package com.example.DBLogin;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.DBLogin.api.BaseApiService;
 import com.example.DBLogin.api.UtilsApi;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -30,23 +35,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
-    EditText userNameRegister;
-    EditText emailAddressRegister;
-    EditText passwordRegister, phoneNumberRegister, hintAnswer;
+public class RegisterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private EditText userNameRegister;
+    private EditText emailAddressRegister;
+    private EditText passwordRegister, phoneNumberRegister, hintAnswer;
     private Spinner spinner;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
-    Button btnRegister;
-    ProgressDialog loading;
-    String hintQuestion,gender;
-    Context mContext;
-    BaseApiService mApiService;
+    private Button btnRegister;
+    private ProgressDialog loading;
+    private String hintQuestion,gender = "";
+    private Context mContext;
+    private BaseApiService mApiService;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerRegister);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(RegisterActivity.this, drawerLayout,R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mContext = this;
         mApiService = UtilsApi.getAPIService();
 
@@ -59,6 +73,20 @@ public class RegisterActivity extends AppCompatActivity {
 
         initComponents();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
     public void initComponents(){
         userNameRegister = (EditText) findViewById(R.id.userNameRegister);
         passwordRegister = (EditText) findViewById(R.id.passwordRegister);
@@ -99,30 +127,31 @@ public class RegisterActivity extends AppCompatActivity {
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            JSONObject jsonRESULTS = new JSONObject(response.body().string());
-                            if (response.isSuccessful()) {
+                        if(response.body() != null){
+                            try {
+                                JSONObject jsonRESULTS = new JSONObject(response.body().string());
                                 Log.i("debug", "onResponse: BERHASIL");
                                 loading.dismiss();
                                 int code = Integer.parseInt(jsonRESULTS.getString("code"));
+                                System.out.println("response_data" + code);
                                 if (code == 200) {
                                     String messageCode = jsonRESULTS.getString("code_message");
                                     Toast.makeText(mContext, messageCode, Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(mContext, com.example.DBLogin.LoginActivity.class));
+                                    startActivity(new Intent(mContext, com.example.DBLogin.LoginActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
                                 } else {
                                     String errorMessage = jsonRESULTS.getString("code_message");
                                     Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                Log.i("debug", "onResponse: GA BERHASIL");
-                                String errorMessage = jsonRESULTS.getString("code_message");
-                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
-                                loading.dismiss();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        }else {
+                            loading.dismiss();
+                            Toast.makeText(mContext, "Some Field Is Empty", Toast.LENGTH_SHORT).show();
                         }
                     }
 

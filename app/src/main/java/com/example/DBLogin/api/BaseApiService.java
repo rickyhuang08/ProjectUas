@@ -5,8 +5,7 @@ import com.google.gson.JsonObject;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -29,6 +28,13 @@ public interface BaseApiService {
         @Headers("Content-Type: application/json")
         @POST("forgot-password")
         Call<ResponseBody> forgotPassword(@Body JsonObject jsonObject);
-    }
+
+        @GET("getdata-posting")
+        Call<ResponseBody> getDataPosting();
+
+        @Headers("Content-Type: application/json")
+        @POST("profile-user")
+        Call<ResponseBody> profileUser(@Body JsonObject jsonObject);
+}
 
 

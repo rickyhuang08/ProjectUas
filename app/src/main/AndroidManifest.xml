@@ -2,17 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.DBLogin">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ricky_08_foreground"
-        android:label="Login mySQL"
+        android:label=""
         android:roundIcon="@mipmap/ricky_08_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"> <!-- Untuk CLEARTEXT traffic -->
-        <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".CheckForgotPasswordActivity"></activity>
-        <activity android:name=".ForgotPassword"></activity>
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        android:usesCleartextTraffic="true">
+        <!-- Untuk CLEARTEXT traffic -->
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".CheckForgotPasswordActivity" />
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".dialogInterface" />
+        <activity android:name=".showVideo"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -21,8 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    </application>
 
 </manifest>

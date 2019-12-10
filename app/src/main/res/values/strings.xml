@@ -14,4 +14,9 @@
     <string name="hintAnswer">Hint Answer</string>
     <string name="login">LOGIN</string>
     <string name="hallo">Hallo :</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="home"><u>Home</u></string>
+    <string name="profile"><u>Profile</u></string>
+    <string name="logout"><u>Logout</u></string>
 </resources>

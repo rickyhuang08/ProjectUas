@@ -1,8 +1,11 @@
 package com.example.DBLogin.api;
 
 public class UtilsApi {
-    // Default IP Emulator Android Studio 10.0.2.2
-    public static final String BASE_URL_API = "http://172.20.10.3:8080/api/user/";
+
+//    public static final String BASE_URL_API = "http://172.20.10.3:8080/api/user/";
+//    public static final String BASE_URL_API = "http://192.168.1.41:8080/api/user/";
+//    public static final String BASE_URL_API = "http://192.168.30.43:8080/api/user/";
+    public static final String BASE_URL_API = "http://192.168.10.11:8080/api/user/";
 
     // Mendeklarasikan Interface BaseApiService
     public static com.example.DBLogin.api.BaseApiService getAPIService(){

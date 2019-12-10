@@ -5,15 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.DBLogin.api.BaseApiService;
 import com.example.DBLogin.api.UtilsApi;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -26,22 +31,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForgotPassword extends AppCompatActivity {
+public class ForgotPassword extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private EditText newPassword;
     private EditText confirmPassword;
     private Button btnForgotPassword;
     private Context mContext;
     private BaseApiService mApiService;
     private ProgressDialog loading;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerForgotPassword);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(ForgotPassword.this, drawerLayout,R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext = this;
         mApiService = UtilsApi.getAPIService();
 
         iniComponents();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
     }
 
     public void iniComponents(){
@@ -68,30 +94,31 @@ public class ForgotPassword extends AppCompatActivity {
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.body().string());
-                            if(response.isSuccessful()){
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
                                 Log.i("debug", "onResponse: BERHASIL");
                                 loading.dismiss();
                                 int code = Integer.parseInt(jsonObject.getString("code"));
                                 if(code == 200){
                                     String messageCode = jsonObject.getString("code_message");
                                     Toast.makeText(mContext, messageCode, Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(mContext, com.example.DBLogin.LoginActivity.class));
+                                    startActivity(new Intent(mContext, com.example.DBLogin.LoginActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
                                 }else {
                                     String errorMessage = jsonObject.getString("code_message");
                                     Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
-                                Log.i("debug", "onResponse: GA BERHASIL");
-                                String errorMessage = jsonObject.getString("code_message");
-                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show();
-                                loading.dismiss();
+
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }catch (IOException e){
+                                e.printStackTrace();
                             }
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }catch (IOException e){
-                            e.printStackTrace();
+                        }else {
+                            loading.dismiss();
+                            Toast.makeText(mContext, "Some Field Is Empty", Toast.LENGTH_SHORT).show();
                         }
                     }
 
